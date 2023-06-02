@@ -1,4 +1,4 @@
-# Cell-Simulation
+# Cell-Simulation by Thanh La
 I took this project from conception to completion in hopes that someone could find this tool useful. The goal of this project was to create a way to simulate cells and viruses, allowing us to predict their behavior. Depending on the parameters, you get some pretty interesting behaviors.
 
 This project was written in C++. The first UI box was generated from wxWidgets and the simulation was done with the SFML library.

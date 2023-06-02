@@ -14,7 +14,7 @@ This project was written in C++. The first UI box was generated from wxWidgets a
 ## Notable Features:
 - There are preset parameters to simulate the common diseases 
 - The Viruses have a Lysogenic feature, in which the viruses actually attack WBC/RBC and is able to reproduce. A lysogenic value of 0 indicates that it will not attack the cell until it dies and will just allow the cell to essentially do nothing towards the virus. However, the cells can still be made aggressive towards other cells, including towards others in it's own group (WBC/RBC).
-- Aggression levels are set at a percentage, where a random number generator determines if it will attack or not. Note, viruses will always attack if aggression is set to 1 ( e {0, 1} ), so this feature will not be up to chance. The same applies for the WBC and Virus interaction, if the WBC is not infrected, it will always attack. Where as the WBC and RBC interactions are.
+- Aggression levels are set at a percentage, where a random number generator determines if it will attack or not. Note, viruses will always attack if aggression is set to 1 ( e {0, 1} ), so this feature will not be up to chance. The same applies for the WBC and Virus interaction, if the WBC is not infected, it will always attack. Where as the WBC and RBC interactions are.
 - Aggression values, pre and post infection will help fine tune the behavior you will model.
 - Flashing units signify that they are being under attack.
 - The viruses has a threshold value where the population size must qualify the threshold value before it is recognized as a threat.

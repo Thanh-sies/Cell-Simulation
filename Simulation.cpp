@@ -130,12 +130,15 @@ void Simulation::Render()
 
   this->window.clear();
   // spawn and replenish
+  // To show the path, uncomment the below. Note: will slow down application
+  //  Simulation::highlight_path(virus_map, sf::Color::Green);
+  //  Simulation::highlight_path(wbc_map, sf::Color::White);
+  //  Simulation::highlight_path(rbc_map, sf::Color::Red);
   if (iteration_count % 100 == 0)
   {
     // Spawn until we reach stable levels
     std::uniform_int_distribution<std::mt19937::result_type> x_pos_rng(0, 2 * ATTACK_RADIUS);
     std::uniform_int_distribution<std::mt19937::result_type> y_pos_rng(this->window_height - 2 * ATTACK_RADIUS, this->window_height);
-    std::list<LUCA> temp_pop;
     std::list<std::pair<int, int>> pos_list;
     // Spawn WBC
     if (wbc_pop.size() < this->params[WBC_STABLE_CNT]->GetValue() && this->params[WBC_SPAWN_CNT]->GetValue() <= wbc_bone_marrow_rsc)
@@ -145,16 +148,11 @@ void Simulation::Render()
       {
         pos_list.push_back(std::pair(x_pos_rng(rng_object.rng), y_pos_rng(rng_object.rng)));
       }
-      Simulation::instantiate_cell(temp_pop, white, wbc_ring, pos_list, "WBC",
+      Simulation::instantiate_cell(wbc_pop, white, wbc_ring, pos_list, "WBC",
                                    this->params[WBC_LIFEFORCE_CYCLES]->GetValue(),
                                    this->params[WBC_AGG_PCT_INTRA]->GetValue(),
                                    this->params[WBC_AGG_PCT_INTER]->GetValue());
-      for (auto &wbc_new : temp_pop)
-      {
-        wbc_pop.push_back(wbc_new);
-      }
-      wbc_bone_marrow_rsc -= temp_pop.size();
-      temp_pop.clear();
+      wbc_bone_marrow_rsc -= new_wbc_cnt;
       pos_list.clear();
     }
     // Spawn RBC
@@ -165,16 +163,11 @@ void Simulation::Render()
       {
         pos_list.push_back(std::pair(x_pos_rng(rng_object.rng), y_pos_rng(rng_object.rng)));
       }
-      Simulation::instantiate_cell(temp_pop, red, rbc_ring, pos_list, "RBC",
+      Simulation::instantiate_cell(rbc_pop, red, rbc_ring, pos_list, "RBC",
                                    this->params[RBC_LIFEFORCE_CYCLES]->GetValue(),
                                    this->params[RBC_AGG_PCT_INTRA]->GetValue(),
                                    this->params[RBC_AGG_PCT_INTER]->GetValue());
-      for (auto &rbc_new : temp_pop)
-      {
-        rbc_pop.push_back(rbc_new);
-      }
-      rbc_bone_marrow_rsc -= temp_pop.size();
-      temp_pop.clear();
+      rbc_bone_marrow_rsc -= new_rbc_cnt;
       pos_list.clear();
     }
     // Replenish
@@ -244,9 +237,9 @@ void Simulation::Render()
   ss << "Viruses: " << virus_pop.size() << ", WBC: " << wbc_pop.size()
      << ", RBC: " << rbc_pop.size() << ", Infected: " << infected_cells.size()
      << "\nMutation version recognized: ";
-  for (auto &mutation_version : threat_registered) ss << mutation_version << ", ";
+  for (auto &mutation_version : threat_registered)
+    ss << mutation_version << ", ";
   ss << "\nIterations : " << iteration_count << std::endl;
-
 
   // output bone marrow info, frame number also
   object_count.setString(ss.str());
@@ -568,7 +561,6 @@ std::pair<int, int> Simulation::handle_virus(LUCA &virus)
       infected_cells.remove(enemy);
       if ((*enemy).infected && reproduction_factor)
       {
-        std::list<LUCA> temp_pop;
         std::list<std::pair<int, int>> pos_list;
         sf::Vector2f enemy_position = (*enemy).getPosition();
         std::tuple<int, int, int, int> dim = Simulation::get_range_coordinates(enemy_position);
@@ -578,20 +570,16 @@ std::pair<int, int> Simulation::handle_virus(LUCA &virus)
         {
           pos_list.push_back(std::pair(x_pos_rng(rng_object.rng), y_pos_rng(rng_object.rng)));
         }
-        if (virus.mutation_success_rate && 
+        if (virus.mutation_success_rate &&
             virus.mutation_success_rate >= rng_object.distribution(rng_object.gen) &&
             virus.mutation_version < this->params[VIRAL_MUTATION_CAP]->GetValue())
         {
           sf::Color dark_grey(90, 90, 90);
-          Simulation::instantiate_virus(temp_pop, green, dark_grey, pos_list, std::pair("Virus", virus.mutation_version+1));
+          Simulation::instantiate_virus(virus_pop, green, dark_grey, pos_list, std::pair("Virus", virus.mutation_version + 1));
         }
         else
         {
-          Simulation::instantiate_virus(temp_pop, green, virus_ring, pos_list, std::pair("Virus", virus.mutation_version));
-        }
-        for (auto &v_new : temp_pop)
-        {
-          virus_pop.push_back(v_new);
+          Simulation::instantiate_virus(virus_pop, green, virus_ring, pos_list, std::pair("Virus", virus.mutation_version));
         }
       }
       Simulation::clear_LUCA((*range_map), (*population), (*enemy), true);

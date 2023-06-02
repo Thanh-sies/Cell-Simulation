@@ -14,13 +14,14 @@ This project was written in C++. The first UI box was generated from wxWidgets a
 ## Notable Features:
 - There are preset parameters to simulate the common diseases 
 - The Viruses have a Lysogenic feature, in which the viruses actually attack WBC/RBC and is able to reproduce. A lysogenic value of 0 indicates that it will not attack the cell until it dies and will just allow the cell to essentially do nothing towards the virus. However, the cells can still be made aggressive towards other cells, including towards others in it's own group (WBC/RBC).
+- Aggression levels are set at a percentage, where a random number generator determines if it will attack or not. Note, viruses will always attack if aggression is set to 1 ( e {0, 1} ), so this feature will not be up to chance. The same applies for the WBC and Virus interaction, if the WBC is not infrected, it will always attack. Where as the WBC and RBC interactions are.
+- Aggression values, pre and post infection will help fine tune the behavior you will model.
+- Flashing units signify that they are being under attack.
 - The viruses has a threshold value where the population size must qualify the threshold value before it is recognized as a threat.
 - When a cell that isn't infected dies off, the WBC will all go towards the spot where the RBC/WBC died to defend the system.
-- Aggression values, pre and post infection will help fine tune the behavior you will model.
 - Bone marrow supply, replenish rate and the cell spawn rate all work together to emulate a cell production system. When the cells fall below the stable threshold, the system will pump out the maximum that it can. The maximum is barred by the spawn rate and the bone marrow supply.
 - For testing and those who want to see what the paths considered for finding an enemy within range looks like, you can use the highlight_map function in the Simulation file. This function takes in a population map and color for what the paths you want to show.
-
-Foreign cells will only be attacked when their population size qualifies the threshold.
+- Foreign cells will only be attacked when their population size qualifies the threshold.
 
 ### Parameter Panel
 <img width="994" alt="Screenshot 2023-06-02 at 1 44 29 AM" src="https://github.com/Thanh-sies/Cell-Simulation/assets/7445307/66923ea5-6cd9-4e79-b257-596b5e8b76cc">

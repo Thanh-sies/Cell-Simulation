@@ -569,24 +569,19 @@ std::pair<int, int> Simulation::handle_virus(LUCA &virus)
         {
           pos_list.push_back(std::pair(x_pos_rng(rng_object.rng), y_pos_rng(rng_object.rng)));
         }
-        sf::Color dark_grey(90, 90, 90);
+        int new_mutation_version = virus.mutation_version;
         if (virus.mutation_success_rate &&
             virus.mutation_success_rate >= rng_object.distribution(rng_object.gen) &&
             virus.mutation_version < this->params[VIRAL_MUTATION_CAP]->GetValue())
         {
-          Simulation::instantiate_virus(virus_pop, green, dark_grey, pos_list, std::pair("Virus", virus.mutation_version + 1));
+          new_mutation_version += 1;
         }
-        else
+        sf::Color ring_color(90, 90, 90);
+        if (new_mutation_version <= 0)
         {
-          if (virus.mutation_version > 0)
-          {
-            Simulation::instantiate_virus(virus_pop, green, dark_grey, pos_list, std::pair("Virus", virus.mutation_version));
-          }
-          else
-          {
-            Simulation::instantiate_virus(virus_pop, green, virus_ring, pos_list, std::pair("Virus", virus.mutation_version));
-          }
+          ring_color = virus_ring;
         }
+        Simulation::instantiate_virus(virus_pop, green, ring_color, pos_list, std::pair("Virus", new_mutation_version));
       }
       Simulation::clear_LUCA((*range_map), (*population), (*enemy), true);
     }

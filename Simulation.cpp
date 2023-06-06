@@ -291,7 +291,7 @@ LUCA *Simulation::fetch_first_enemy(LUCA &self, const std::list<LUCA *> &candida
   first.sort();
   std::list<LUCA *> second;
   // excluded infected cells from selection
-  if (self.LUCA_name != "WBC" && self.LUCA_name != "RBC" && !this->params[VIRAL_REPRODUCTION_FACTOR]->GetValue())
+  if (self.LUCA_name != "WBC" && self.LUCA_name != "RBC" && !self.reproduction)
   {
     second = infected_cells;
   }
@@ -506,7 +506,7 @@ void Simulation::instantiate_virus(std::list<LUCA> &virus_pop, sf::Color &fill, 
     int x = this->getDirection(rng_object.d_pos(rng_object.rng)), y = this->getDirection(rng_object.d_pos(rng_object.rng));
     Virus virus(this->params[VIRUS_LIFEFORCE_CYCLES]->GetValue(), (float)this->params[VIRAL_AGG_WBC]->GetValue() / 100,
                 (float)this->params[VIRAL_AGG_RBC]->GetValue() / 100, x, y, name_version.second, (float)this->params[VIRAL_INFECTION_RATE]->GetValue() / 100,
-                (float)this->params[VIRAL_MUTATION_RATE]->GetValue() / 100, this->params[VIRAL_MUTATION_CAP]->GetValue(), 0, name_version.first);
+                (float)this->params[VIRAL_MUTATION_RATE]->GetValue() / 100, this->params[VIRAL_MUTATION_CAP]->GetValue(), this->params[VIRAL_REPRODUCTION_FACTOR]->GetValue(), name_version.first);
     virus.setFillColor(fill);
     virus.setOutlineColor(ring);
     virus.setPosition(pos.first, pos.second);
@@ -557,16 +557,15 @@ std::pair<int, int> Simulation::handle_virus(LUCA &virus)
     {
       sf::Vector2f enemy_position = (*enemy).getPosition();
       pos_destination = std::pair((int)enemy_position.x, (int)enemy_position.y);
-      int reproduction_factor = this->params[VIRAL_REPRODUCTION_FACTOR]->GetValue();
       infected_cells.remove(enemy);
-      if ((*enemy).infected && reproduction_factor)
+      if ((*enemy).infected && virus.reproduction)
       {
         std::list<std::pair<int, int>> pos_list;
         sf::Vector2f enemy_position = (*enemy).getPosition();
         std::tuple<int, int, int, int> dim = Simulation::get_range_coordinates(enemy_position);
         std::uniform_int_distribution<std::mt19937::result_type> x_pos_rng(std::get<0>(dim), std::get<1>(dim));
         std::uniform_int_distribution<std::mt19937::result_type> y_pos_rng(std::get<2>(dim), std::get<3>(dim));
-        for (int i = 0; i < reproduction_factor; i++)
+        for (int i = 0; i < virus.reproduction; i++)
         {
           pos_list.push_back(std::pair(x_pos_rng(rng_object.rng), y_pos_rng(rng_object.rng)));
         }
@@ -600,7 +599,7 @@ std::pair<int, int> Simulation::handle_virus(LUCA &virus)
           (*enemy).rbc_aggressive = (float)this->params[RBC_AGG_PCT_INTRA_INFECTED]->GetValue() / 100;
         }
       }
-      if (!this->params[VIRAL_REPRODUCTION_FACTOR]->GetValue())
+      if (!virus.reproduction)
         Simulation::clear_LUCA((*range_map), (*population), (*enemy), false);
     }
   }

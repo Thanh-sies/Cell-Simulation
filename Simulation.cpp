@@ -576,10 +576,12 @@ std::pair<int, int> Simulation::handle_virus(LUCA &virus)
         {
           new_mutation_version += 1;
         }
-        sf::Color ring_color(90, 90, 90);
-        if (new_mutation_version <= 0)
+        sf::Color ring_color = virus_ring;
+        if (new_mutation_version > 0)
         {
-          ring_color = virus_ring;
+          int r = std::min(255, 100 + 10 * new_mutation_version);
+          int g = r, b = r;
+          ring_color = sf::Color(r, g, b);
         }
         Simulation::instantiate_virus(virus_pop, green, ring_color, pos_list, std::pair("Virus", new_mutation_version));
       }

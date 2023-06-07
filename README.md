@@ -22,6 +22,7 @@ This project was written in C++. The first UI box was generated from wxWidgets a
 - Bone marrow supply, replenish rate and the cell spawn rate all work together to emulate a cell production system. When the cells fall below the stable threshold, the system will pump out the maximum that it can. The maximum is barred by the spawn rate and the bone marrow supply.
 - For testing and those who want to see what the paths considered for finding an enemy within range looks like, you can use the highlight_map function in the Simulation file. This function takes in a population map and color for what the paths you want to show.
 - Foreign cells will only be attacked when their population size qualifies the threshold.
+- The whiter the ring is around the virus, the higher the mutation version.
 
 ### Parameter Panel
 <img width="994" alt="Screenshot 2023-06-02 at 1 44 29 AM" src="https://github.com/Thanh-sies/Cell-Simulation/assets/7445307/66923ea5-6cd9-4e79-b257-596b5e8b76cc">
@@ -31,7 +32,7 @@ This project was written in C++. The first UI box was generated from wxWidgets a
 
 
 ### Video of the HIV Simulation
-
+- The ring color around the cells can be swapped out based on what is easier for your liking. In the video below, mutated viruses have their ring turn black. In my updated code, I have the ring color advance toward white. This was an aesthetic change in case it would be harder to see. Just like the ring color, all other aspects of the animation can be changed based on the user's liking.
 
 https://github.com/Thanh-sies/Cell-Simulation/assets/7445307/b29e5c41-ad7c-4ff4-b93f-1f750c1aac91
 

@@ -32,7 +32,7 @@ This project was written in C++. The first UI box was generated from wxWidgets a
 
 
 ### Video of the HIV Simulation
-- The ring color around the cells can be swapped out based on what is easier for your liking. In the video below, mutated viruses have their ring turn black. In my updated code, I have the ring color advance toward white. This was an aesthetic change in case it would be harder to see. Just like the ring color, all other aspects of the animation can be changed based on the user's liking.
+- The ring color around the cells can be swapped out based on what you prefer. In the video below, mutated viruses have their ring turn black. In my updated code, I have the ring color advance toward white. This was an aesthetic change in case it would be harder to see. Just like the ring color, all other aspects of the animation can be changed based on the user's liking.
 
 https://github.com/Thanh-sies/Cell-Simulation/assets/7445307/b29e5c41-ad7c-4ff4-b93f-1f750c1aac91
 
